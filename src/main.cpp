@@ -2,20 +2,33 @@
 #include <string>
 #include <vector>
 
-#include "Document.h"
 #include "DocumentReader.h"
-#include "Tokenizer.h"
+#include "InvertedIndex.h"
 
 int main(int argc, char* argv[]) {
     std::string directory = (argc > 1) ? argv[1] : "data";
 
-    std::vector<Document> documents = DocumentReader::readDirectory(directory);
-    std::cout << "Documents loaded: " << documents.size() << "\n";
+    InvertedIndex index;
+    for (const Document& doc : DocumentReader::readDirectory(directory)) {
+        index.addDocument(doc);
+    }
 
-    for (const Document& doc : documents) {
-        std::vector<std::string> tokens = Tokenizer::tokenize(doc.getContent());
-        std::cout << "  [" << doc.getId() << "] " << doc.getName()
-                  << " -> " << tokens.size() << " tokens\n";
+    std::cout << "Documents indexed: " << index.documentCount() << "\n";
+    std::cout << "Unique words: " << index.vocabularySize() << "\n\n";
+
+    std::vector<std::string> testWords = {"index", "c", "words", "banana"};
+    for (const std::string& word : testWords) {
+        std::cout << "\"" << word << "\" -> ";
+        const InvertedIndex::Postings* postings = index.getPostings(word);
+        if (postings == nullptr) {
+            std::cout << "not found\n";
+            continue;
+        }
+        for (const auto& entry : *postings) {
+            std::cout << index.getDocument(entry.first)->getName()
+                      << " (freq " << entry.second << ")  ";
+        }
+        std::cout << "\n";
     }
     return 0;
 }

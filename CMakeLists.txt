@@ -13,6 +13,7 @@ add_executable(seekr
     src/Document.cpp
     src/Tokenizer.cpp
     src/DocumentReader.cpp
+    src/InvertedIndex.cpp
 )
 
 target_include_directories(seekr PRIVATE include)
