@@ -10,6 +10,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(seekr
     src/main.cpp
+    src/Document.cpp
 )
 
 target_include_directories(seekr PRIVATE include)
