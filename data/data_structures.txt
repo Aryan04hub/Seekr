@@ -1,0 +1,1 @@
+A trie stores words by prefix. A hash map stores words for fast lookup.

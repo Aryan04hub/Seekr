@@ -1,0 +1,1 @@
+C++ is a powerful programming language. Many search engines are built with C++.

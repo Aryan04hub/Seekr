@@ -12,6 +12,7 @@ add_executable(seekr
     src/main.cpp
     src/Document.cpp
     src/Tokenizer.cpp
+    src/DocumentReader.cpp
 )
 
 target_include_directories(seekr PRIVATE include)

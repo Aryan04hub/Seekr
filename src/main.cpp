@@ -1,14 +1,21 @@
 #include <iostream>
+#include <string>
+#include <vector>
 
+#include "Document.h"
+#include "DocumentReader.h"
 #include "Tokenizer.h"
 
-int main() {
-    std::string text = "Hello, World! Hello... C++17 is GREAT; don't stop.";
-    std::vector<std::string> tokens = Tokenizer::tokenize(text);
+int main(int argc, char* argv[]) {
+    std::string directory = (argc > 1) ? argv[1] : "data";
 
-    std::cout << "Token count: " << tokens.size() << "\n";
-    for (const std::string& token : tokens) {
-        std::cout << "[" << token << "]\n";
+    std::vector<Document> documents = DocumentReader::readDirectory(directory);
+    std::cout << "Documents loaded: " << documents.size() << "\n";
+
+    for (const Document& doc : documents) {
+        std::vector<std::string> tokens = Tokenizer::tokenize(doc.getContent());
+        std::cout << "  [" << doc.getId() << "] " << doc.getName()
+                  << " -> " << tokens.size() << " tokens\n";
     }
     return 0;
 }
