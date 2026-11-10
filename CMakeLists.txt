@@ -14,8 +14,8 @@ add_executable(seekr
     src/Tokenizer.cpp
     src/DocumentReader.cpp
     src/InvertedIndex.cpp
+    src/SearchEngine.cpp
 )
-
 target_include_directories(seekr PRIVATE include)
 
 target_compile_options(seekr PRIVATE -Wall -Wextra -Wpedantic)

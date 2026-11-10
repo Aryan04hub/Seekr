@@ -4,6 +4,21 @@
 
 #include "DocumentReader.h"
 #include "InvertedIndex.h"
+#include "SearchEngine.h"
+
+void runQuery(const SearchEngine& engine, const InvertedIndex& index,
+              const std::string& query, QueryMode mode) {
+    std::cout << "Query: \"" << query << "\" ["
+              << (mode == QueryMode::AND ? "AND" : "OR") << "]\n";
+
+    std::vector<int> ids = engine.search(query, mode);
+    if (ids.empty()) {
+        std::cout << "  No results.\n";
+    }
+    for (int id : ids) {
+        std::cout << "  - " << index.getDocument(id)->getName() << "\n";
+    }
+}
 
 int main(int argc, char* argv[]) {
     std::string directory = (argc > 1) ? argv[1] : "data";
@@ -13,22 +28,14 @@ int main(int argc, char* argv[]) {
         index.addDocument(doc);
     }
 
-    std::cout << "Documents indexed: " << index.documentCount() << "\n";
-    std::cout << "Unique words: " << index.vocabularySize() << "\n\n";
+    SearchEngine engine(index);
 
-    std::vector<std::string> testWords = {"index", "c", "words", "banana"};
-    for (const std::string& word : testWords) {
-        std::cout << "\"" << word << "\" -> ";
-        const InvertedIndex::Postings* postings = index.getPostings(word);
-        if (postings == nullptr) {
-            std::cout << "not found\n";
-            continue;
-        }
-        for (const auto& entry : *postings) {
-            std::cout << index.getDocument(entry.first)->getName()
-                      << " (freq " << entry.second << ")  ";
-        }
-        std::cout << "\n";
-    }
+    runQuery(engine, index, "index", QueryMode::AND);
+    runQuery(engine, index, "words documents", QueryMode::OR);
+    runQuery(engine, index, "search index", QueryMode::AND);
+    runQuery(engine, index, "trie index", QueryMode::AND);
+    runQuery(engine, index, "trie index", QueryMode::OR);
+    runQuery(engine, index, "banana", QueryMode::OR);
+    runQuery(engine, index, "", QueryMode::OR);
     return 0;
 }
