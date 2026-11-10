@@ -1,12 +1,14 @@
 #include <iostream>
 
-#include "Document.h"
+#include "Tokenizer.h"
 
 int main() {
-    Document doc(1, "sample.txt", "Hello Seekr search engine");
+    std::string text = "Hello, World! Hello... C++17 is GREAT; don't stop.";
+    std::vector<std::string> tokens = Tokenizer::tokenize(text);
 
-    std::cout << "ID: " << doc.getId() << "\n";
-    std::cout << "Name: " << doc.getName() << "\n";
-    std::cout << "Content: " << doc.getContent() << "\n";
+    std::cout << "Token count: " << tokens.size() << "\n";
+    for (const std::string& token : tokens) {
+        std::cout << "[" << token << "]\n";
+    }
     return 0;
 }
