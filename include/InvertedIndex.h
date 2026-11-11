@@ -20,6 +20,9 @@ public:
     std::size_t documentCount() const;
     std::size_t vocabularySize() const;
 
+        // Returns every indexed word (used to build the autocomplete Trie).
+    std::vector<std::string> vocabulary() const;
+
     // Returns the document with this ID, or nullptr if the ID is invalid.
     const Document* getDocument(int id) const;
 

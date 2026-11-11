@@ -28,3 +28,12 @@ const Document* InvertedIndex::getDocument(int id) const {
     }
     return &documents_[static_cast<std::size_t>(id)];
 }
+
+std::vector<std::string> InvertedIndex::vocabulary() const {
+    std::vector<std::string> words;
+    words.reserve(index_.size());
+    for (const auto& entry : index_) {
+        words.push_back(entry.first);
+    }
+    return words;
+}
