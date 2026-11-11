@@ -1,6 +1,20 @@
 # Seekr: Mini Search Engine in C++17
 
 A local document search engine that indexes `.txt` files and returns ranked results, built from scratch with the C++ standard library only (no external dependencies).
+## Architecture
+
+```mermaid
+flowchart TD
+    Files[".txt files in data/"] --> Reader["DocumentReader"]
+    Reader -->|"Document objects"| Index["InvertedIndex"]
+    Tok["Tokenizer"] --> Index
+    Index -->|"vocabulary"| Trie["Trie (autocomplete)"]
+    Index --> Engine["SearchEngine (AND / OR, TF-IDF, Top-K)"]
+    Tok --> Engine
+    Engine --> CLI["main.cpp (interactive CLI)"]
+    Trie --> CLI
+```
+
 
 ## Features
 - **Document processing:** reads all `.txt` files in a directory, skips unreadable files and invalid directories
@@ -11,6 +25,16 @@ A local document search engine that indexes `.txt` files and returns ranked resu
 - **Autocomplete:** Trie built from the index vocabulary
 - **Tests:** custom test harness (45 checks)
 - **Benchmark:** timing of indexing and search at 100, 1,000 and 10,000 documents
+
+## Screenshots
+
+**Interactive search session**
+
+![CLI demo](screenshots/cli-demo.png)
+
+**Tests and benchmark**
+
+![Tests and benchmark](screenshots/tests-benchmark.png)
 
 ## Ranking formula
 ```
