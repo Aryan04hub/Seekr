@@ -15,6 +15,7 @@ add_executable(seekr
     src/DocumentReader.cpp
     src/InvertedIndex.cpp
     src/SearchEngine.cpp
+    src/Trie.cpp
 )
 target_include_directories(seekr PRIVATE include)
 
