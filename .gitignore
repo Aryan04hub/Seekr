@@ -12,3 +12,6 @@ cmake-build-*/
 *.o
 *.out
 *.dSYM/
+
+echo "build-release/" >> .gitignore
+git status --shortbuild-release/

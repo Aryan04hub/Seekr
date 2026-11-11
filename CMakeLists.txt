@@ -27,3 +27,7 @@ target_compile_options(seekr_tests PRIVATE -Wall -Wextra -Wpedantic)
 
 enable_testing()
 add_test(NAME seekr_tests COMMAND seekr_tests)
+
+add_executable(seekr_benchmark benchmarks/benchmark.cpp)
+target_link_libraries(seekr_benchmark PRIVATE seekr_core)
+target_compile_options(seekr_benchmark PRIVATE -Wall -Wextra -Wpedantic)
