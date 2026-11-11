@@ -1,5 +1,6 @@
 # Build output
 build/
+build-release/
 cmake-build-*/
 
 # macOS
@@ -12,6 +13,3 @@ cmake-build-*/
 *.o
 *.out
 *.dSYM/
-
-echo "build-release/" >> .gitignore
-git status --shortbuild-release/
