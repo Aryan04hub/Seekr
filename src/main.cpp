@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -6,17 +7,18 @@
 #include "InvertedIndex.h"
 #include "SearchEngine.h"
 
-void runQuery(const SearchEngine& engine, const InvertedIndex& index,
-              const std::string& query, QueryMode mode) {
+void runRanked(const SearchEngine& engine, const InvertedIndex& index,
+               const std::string& query, QueryMode mode, std::size_t k) {
     std::cout << "Query: \"" << query << "\" ["
-              << (mode == QueryMode::AND ? "AND" : "OR") << "]\n";
+              << (mode == QueryMode::AND ? "AND" : "OR") << ", top " << k << "]\n";
 
-    std::vector<int> ids = engine.search(query, mode);
-    if (ids.empty()) {
+    std::vector<SearchResult> results = engine.searchRanked(query, mode, k);
+    if (results.empty()) {
         std::cout << "  No results.\n";
     }
-    for (int id : ids) {
-        std::cout << "  - " << index.getDocument(id)->getName() << "\n";
+    for (const SearchResult& r : results) {
+        std::cout << "  " << std::fixed << std::setprecision(3) << r.score << "  "
+                  << index.getDocument(r.docId)->getName() << "\n";
     }
 }
 
@@ -30,12 +32,10 @@ int main(int argc, char* argv[]) {
 
     SearchEngine engine(index);
 
-    runQuery(engine, index, "index", QueryMode::AND);
-    runQuery(engine, index, "words documents", QueryMode::OR);
-    runQuery(engine, index, "search index", QueryMode::AND);
-    runQuery(engine, index, "trie index", QueryMode::AND);
-    runQuery(engine, index, "trie index", QueryMode::OR);
-    runQuery(engine, index, "banana", QueryMode::OR);
-    runQuery(engine, index, "", QueryMode::OR);
+    runRanked(engine, index, "index", QueryMode::AND, 3);
+    runRanked(engine, index, "words index", QueryMode::OR, 3);
+    runRanked(engine, index, "words index", QueryMode::OR, 1);
+    runRanked(engine, index, "a", QueryMode::OR, 3);
+    runRanked(engine, index, "banana", QueryMode::OR, 3);
     return 0;
 }
